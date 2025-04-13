@@ -15,25 +15,38 @@ export async function GET(req) {
   }
 }
 export async function POST(req) {
-  try {
-    await connectDB();
-
-    const body = await req.json();
-    console.log(body);
-
-    const newBook = new Book({
-      name: body.name,
-      price: body.price,
-    });
-    await newBook.save();
-    return NextResponse.json(
-      { mes: "THIS IS POST METOD (USERS)" },
-      { status: 201 }
-    );
-  } catch (err) {
-    return NextResponse.json({ mes: "Interinal server", err }, { status: 500 });
+    try {
+      await connectDB();
+      const body = await req.json();
+      console.log("POST body:", body);
+  
+      const newBook = new Book({
+        name: body.name,
+        price: Number(body.price),
+        description: body.description,
+        pageCount: Number(body.pageCount),
+        category: body.category,
+        publishDate: body.publishDate,
+        author: body.author,
+        language: body.language,
+        stockCount: Number(body.stockCount),
+      });
+  
+      await newBook.save();
+  
+      return NextResponse.json(
+        { mes: "Book created successfully", book: newBook },
+        { status: 201 }
+      );
+    } catch (err) {
+      console.error("POST ERROR:", err);
+      return NextResponse.json(
+        { mes: "Internal server error", error: err.message },
+        { status: 500 }
+      );
+    }
   }
-}
+  
 
 export async function DELETE(req) {
     try {
