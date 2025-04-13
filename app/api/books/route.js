@@ -34,3 +34,17 @@ export async function POST(req) {
     return NextResponse.json({ mes: "Interinal server", err }, { status: 500 });
   }
 }
+
+export async function DELETE(req) {
+    try {
+      await connectDB();
+      const body = await req.json()
+      const deletBookById = await Book.findOneAndDelete(body.id);
+      return NextResponse.json(
+        { mes: "deleted" },
+        { status: 200 }
+      );
+    } catch (err) {
+      return NextResponse.json({ mes: "Interinal server", err }, { status: 500 });
+    }
+  }
