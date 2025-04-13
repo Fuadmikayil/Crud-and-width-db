@@ -7,7 +7,7 @@ export async function GET(req) {
     await connectDB();
     const allBooks = await Book.find();
     return NextResponse.json(
-      { mes: "THIS IS GET METOD (USERS)" },
+      { mes: "THIS IS GET METOD (USERS)" ,allBooks},
       { status: 200 }
     );
   } catch (err) {
