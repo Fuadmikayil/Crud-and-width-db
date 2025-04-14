@@ -11,6 +11,8 @@ export default function HomePage() {
   } = useForm();
 
   const [books, setBooks] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
 
   // Fetch all books
   useEffect(() => {
@@ -67,6 +69,16 @@ export default function HomePage() {
       alert("Şəbəkə xətası!");
     }
   };
+  const handleSearch = async () => {
+    try {
+      const res = await fetch(`/api/books?q=${searchTerm}`);
+      const data = await res.json();
+      setBooks(data.allBooks || []);
+    } catch (error) {
+      alert("Axtarış zamanı xəta baş verdi!");
+    }
+  };
+  
 
   return (
     <div className="p-6 max-w-4xl mx-auto">
@@ -116,6 +128,23 @@ export default function HomePage() {
           Əlavə et
         </button>
       </form>
+      <section className="mt-6 flex gap-2">
+  <input
+    type="text"
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    placeholder="Kitab adını yaz.."
+    className="border p-2 flex-grow"
+  />
+  <button
+    onClick={handleSearch}
+    type="button"
+    className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+  >
+    Axtar
+  </button>
+</section>
+
     </div>
   );
 }
